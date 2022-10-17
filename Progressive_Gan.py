@@ -1,19 +1,19 @@
-from selectors import EpollSelector
 from Custom_Layers import Fade_In, wasserstain_loss, PixelNormalization, MinibatchStd, Dense, Conv2D
 import tensorflow as tf
 from Input import GenerateDataset
 import matplotlib.pyplot as plt
+import os
 
-IMAGE_DIM_TO_N_STEP = dict((2 ** i, i - 2) for i in range(2, 9))
-N_STEP_TO_IMAGE_DIM = dict((i - 2, 2 ** i) for i in range(2, 9))
+IMAGE_DIM_TO_N_STEP = dict((2 ** i, i - 2) for i in range(2, 12))
+N_STEP_TO_IMAGE_DIM = dict((i - 2, 2 ** i) for i in range(2, 12))
 IMAGE_DIMS = list(IMAGE_DIM_TO_N_STEP.keys())
 
 BATCH_SIZES = {4 : 32, 8 : 32, 16 : 16, 32 : 16, 64 : 8, 128 : 4, 256 : 2}
-EPOCHS = {4 : 8, 8 : 8, 16 : 8, 32 : 8, 64 : 8, 128 : 8, 256 : 8}
+EPOCHS = {4 : 10, 8 : 10, 16 : 10, 32 : 10, 64 : 10, 128 : 8, 256 : 8}
 LATENT_DIM = 256
 LEAKY_RELU_ALPHA = 0.2
-N_IMAGES = 10000
-N_STEPS = 6
+N_IMAGES = 30000
+N_STEPS = 5
 
 class Progressive_Gan(tf.keras.models.Model):
     def __init__(self, latent_dim, leaky_relu_alpha, n_steps, *args, **kwargs):
@@ -274,6 +274,7 @@ class Progressive_Gan(tf.keras.models.Model):
         self.penalty_const = 10
         loss = self.penalty_const * loss
         return loss
+
 
     def Generate_Models(self, step):
         if not (self.is_in_transition):
